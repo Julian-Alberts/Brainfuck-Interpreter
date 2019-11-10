@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="src/BFInterpreter.js"></script>
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <button id="run">Run</button>
+    <div contenteditable id="code">
+        ++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.
+        Source https://en.wikipedia.org/wiki/Brainfuck#Hello_World.21
+    </div>
+    <div id="console"></div>
+    <span>Pointer: <output id="pointer">0</output></span>
+    <table id="mem-table"></table>
+    <script src="src/index.js"></script>
+</body>
+</html>
