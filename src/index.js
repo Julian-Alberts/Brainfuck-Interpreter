@@ -90,9 +90,16 @@ let cl = new FakeConsole();
 let memTable = setupTable();
 let bfInterpreter = new BFInterpreter();
 let codeInput = document.getElementById('code');
-let run = document.getElementById('run');
 let pointer = document.getElementById('pointer');
 let clockSpeed = document.getElementById('clock-speed');
+
+let run = document.getElementById('run');
+let pause = document.getElementById('pause');
+let step = document.getElementById('step');
+/** @type {HTMLButtonElement} */
+let reset = document.getElementById('reset');
+
+let isProgrammRunning = false;
 
 cl.onRead = s => bfInterpreter.writeToSTDIn(s);
 bfInterpreter.onSTDOut = s => cl.writeToSTDOut(s);
@@ -115,12 +122,50 @@ bfInterpreter.onMemChange = (pos, value) => {
 }
 
 run.addEventListener('click', () => {
-    try {
-        bfInterpreter.parseCode(codeInput.innerText);
-    } catch (e) {
-        alert(e.message);
+    if (!isProgrammRunning) {
+        try {
+            bfInterpreter.parseCode(codeInput.innerText);
+            isProgrammRunning = true;
+        } catch (e) {
+            alert(e.message);
+        }
     }
+    reset.disabled = false;
+    pause.disabled = false;
+    step.disabled = true;
+    run.disabled = true;
     bfInterpreter.run();
+});
+
+pause.addEventListener('click', () => {
+    bfInterpreter.pause();
+    reset.disabled = false;
+    pause.disabled = true;
+    step.disabled = false;
+    run.disabled = false;
+});
+
+step.addEventListener('click', () => {
+    if (!isProgrammRunning) {
+        try {
+            bfInterpreter.parseCode(codeInput.innerText);
+        } catch (e) {
+            alert(e.message);
+        }
+    }
+    reset.disabled = false;
+    pause.disabled = true;
+    isProgrammRunning = true;
+    bfInterpreter.nextStep();
+});
+
+reset.addEventListener('click', () => {
+    bfInterpreter.reset();
+    reset.disabled = true;
+    pause.disabled = true;
+    step.disabled = false;
+    run.disabled = false;
+    isProgrammRunning = false;
 });
 
 bfInterpreter.onPointerChange = p => {
@@ -131,3 +176,10 @@ clockSpeed.addEventListener('change', () => {
     bfInterpreter.setClockSpeed(clockSpeed.value);
 });
 
+bfInterpreter.onStop = () => {
+    isProgrammRunning = false;
+    reset.disabled = true;
+    pause.disabled = true;
+    step.disabled = false;
+    run.disabled = false;
+}

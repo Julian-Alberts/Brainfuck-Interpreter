@@ -5,6 +5,7 @@ class BFInterpreter {
         this.onSTDOut = (_) => {};
         this.onMemChange = (pos, value) => {};
         this.onPointerChange = (pos) => {};
+        this.onStop = () => {};
         this._clockSpeed = 500;
         this.reset();
     }
@@ -112,6 +113,7 @@ class BFInterpreter {
                 break;
             case undefined:
                 this.pause();
+                this.onStop();
         }
     }
 
