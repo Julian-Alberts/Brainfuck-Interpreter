@@ -11,11 +11,29 @@ class BFInterpreter {
 
     /**
      * 
-     * @param {string} code 
+     * @param {string} code
      */
     parseCode(code) {
         this.reset();
-        this._code = code.replace(/[^.,+-<>\[\]]/g, '');
+        code = code.replace(/[^.,+-<>\[\]]/g, '');
+        let openBrackets = 0;
+        for (let i = 0; i < code.length; i++) {
+            if (code[i] === '[') {
+                openBrackets++;
+            } else if (code[i] === ']') {
+                openBrackets--;
+            }
+        }
+
+        if (openBrackets !== 0) {
+            if (openBrackets < 0) {
+                throw new Error('To many closing ]');
+            } else {
+                throw new Error('Missing ]');
+            }
+        }
+
+        this._code = code;
     }
 
     run() {
@@ -47,12 +65,16 @@ class BFInterpreter {
                 this.onSTDOut(char);
                 break;
             case ',':
-                if (this._stdIn === '') {
+                if (this._stdIn === null) {
                     this._instructionPointer--;
                     return;
+                } else if (this._stdIn === '') {
+                    this._stdIn = null;
+                    this._setMemValue(this._pointer, 0);
+                } else {
+                    this._setMemValue(this._pointer, this._stdIn.charCodeAt(0));
+                    this._stdIn = this._stdIn.substr(1);
                 }
-                this._setMemValue(this._pointer, this._stdIn.charCodeAt(0));
-                this._stdIn = this._stdIn.substr(1);
                 break;
             case '[':
                 if (this._getMemValue(this._pointer) === 0) {
@@ -102,7 +124,7 @@ class BFInterpreter {
         }
         this._pointer = 0;
         this._instructionPointer = -1;
-        this._stdIn = ''
+        this._stdIn = null;
     }
 
     _setMemValue(pos, value) {
@@ -140,7 +162,19 @@ class BFInterpreter {
     }
 
     writeToSTDIn(str) {
-        this._stdIn += str;
+        if (this._stdIn === null) {
+            this._stdIn = str;
+        } else {
+            this._stdIn += str;
+        }
+    }
+
+    setClockSpeed(speed) {
+        this._clockSpeed = speed;
+        if (this._clockId != null) {
+            this.pause();
+            this.run();
+        }
     }
 
 }

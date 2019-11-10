@@ -35,19 +35,31 @@ class FakeConsole {
         this.console.appendChild(this.inputLine);
         this.currentOutputLine = undefined;
         this.onRead = (_) => {}
+        this._stdout = '';
     }
 
-    writeToConsole(string) {
+    /**
+     * 
+     * @param {string} string 
+     */
+    writeToSTDOut(string) {
         if (this.currentOutputLine === undefined) {
             this.currentOutputLine = document.createElement('div');
             this.currentOutputLine.classList.add('std--out');
         }
-        
-        this.currentOutputLine.innerText += string;
+
+        if (string.indexOf(' ') !== -1) {
+            string.replace(' ', '&nsbp;');
+        }
+
+        this._stdout += string;
+        this.currentOutputLine.innerText = this._stdout;
+
         this.console.insertBefore(this.currentOutputLine, this.inputLine);
         
         if (string === '\n') {
             this.currentOutputLine = undefined;
+            this._stdout = '';
         }
     }
 
@@ -79,9 +91,10 @@ let bfInterpreter = new BFInterpreter();
 let codeInput = document.getElementById('code');
 let run = document.getElementById('run');
 let pointer = document.getElementById('pointer');
+let clockSpeed = document.getElementById('clock-speed');
 
 cl.onRead = s => bfInterpreter.writeToSTDIn(s);
-bfInterpreter.onSTDOut = s => cl.writeToConsole(s);
+bfInterpreter.onSTDOut = s => cl.writeToSTDOut(s);
 bfInterpreter.onMemChange = (pos, value) => {
     let x = pos % 16;
     let y = ~~(pos / 16);
@@ -101,11 +114,19 @@ bfInterpreter.onMemChange = (pos, value) => {
 }
 
 run.addEventListener('click', () => {
-    bfInterpreter.parseCode(codeInput.innerText);
+    try {
+        bfInterpreter.parseCode(codeInput.innerText);
+    } catch (e) {
+        alert(e.message);
+    }
     bfInterpreter.run();
 });
 
 bfInterpreter.onPointerChange = p => {
     pointer.innerText = p;
 }
+
+clockSpeed.addEventListener('change', () => {
+    bfInterpreter.setClockSpeed(clockSpeed.value);
+});
 
