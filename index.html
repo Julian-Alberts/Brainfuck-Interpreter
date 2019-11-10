@@ -9,15 +9,26 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <button id="run">Run</button>
-    <div contenteditable id="code">
-        ++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.
-        Source https://en.wikipedia.org/wiki/Brainfuck#Hello_World.21
+    <div>
+        <button id="run" title="run"></button>
+        <button id="pause" title="pause"></button>
+        <button id="step" title="single step"></button>
+        <button id="reset" title="reset"></button>
+        <input type="number" min="0" id="clock-speed" value="500">
     </div>
-    <div id="console"></div>
-    <input type="number" min="0" id="clock-speed" value="500">
-    <span>Pointer: <output id="pointer">0</output></span>
-    <table id="mem-table"></table>
+    <div class="main-container">
+        <div class="sub-container">
+            <div contenteditable id="code">
+                ++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.
+                Source https://en.wikipedia.org/wiki/Brainfuck#Hello_World.21
+            </div>
+            <div id="console"></div>
+        </div>
+        <div class="sub-container">
+            <span>Pointer: <output id="pointer">0</output></span>
+            <table id="mem-table"></table>
+        </div>
+    </div>
     <script src="src/index.js"></script>
 </body>
 </html>
