@@ -16,10 +16,11 @@ function setupTable() {
         let col = document.createElement('th');
         col.textContent = '0x' + i.toString(16).toUpperCase() + '0';
         row.appendChild(col);
-        for(let i = 0; i < 16; i++) {
+        for(let n = 0; n < 16; n++) {
             let col = document.createElement('td');
             rowData.push(col);
             col.textContent = '0x00';
+            col.title = '0x' + i.toString(16).toUpperCase() + n.toString(16).toUpperCase(); 
             row.appendChild(col);
         }
         memTableData.push(rowData);
