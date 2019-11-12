@@ -66,12 +66,9 @@ class BFInterpreter {
                 this.onSTDOut(char);
                 break;
             case ',':
-                if (this._stdIn === null) {
+                if (this._stdIn === '') {
                     this._instructionPointer--;
                     return;
-                } else if (this._stdIn === '') {
-                    this._stdIn = null;
-                    this._setMemValue(this._pointer, 0);
                 } else {
                     this._setMemValue(this._pointer, this._stdIn.charCodeAt(0));
                     this._stdIn = this._stdIn.substr(1);
@@ -126,7 +123,7 @@ class BFInterpreter {
         }
         this._pointer = 0;
         this._instructionPointer = -1;
-        this._stdIn = null;
+        this._stdIn = '';
     }
 
     _setMemValue(pos, value) {
@@ -164,7 +161,7 @@ class BFInterpreter {
     }
 
     writeToSTDIn(str) {
-        if (this._stdIn === null) {
+        if (this._stdIn === '') {
             this._stdIn = str;
         } else {
             this._stdIn += str;
