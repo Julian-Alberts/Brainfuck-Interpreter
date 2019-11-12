@@ -87,10 +87,12 @@ class FakeConsole {
 }
 
 let cl = new FakeConsole();
+let pointer = document.getElementById('pointer');
+let instructionPointer = document.getElementById('ip');
 let memTable = setupTable();
 let bfInterpreter = new BFInterpreter();
+
 let codeInput = document.getElementById('code');
-let pointer = document.getElementById('pointer');
 let clockSpeed = document.getElementById('clock-speed');
 
 let run = document.getElementById('run');
@@ -181,6 +183,10 @@ bfInterpreter.onPointerChange = p => {
     pointer.timeout = setTimeout(() => {
         pointer.classList.remove('changed');
     }, 500);
+}
+
+bfInterpreter.onInstructionPointerChange = (p) => {
+    instructionPointer.innerText = p;
 }
 
 clockSpeed.addEventListener('change', () => {

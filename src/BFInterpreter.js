@@ -6,6 +6,7 @@ class BFInterpreter {
         this.onMemChange = (pos, value) => {};
         this.onPointerChange = (pos) => {};
         this.onStop = () => {};
+        this.onInstructionPointerChange = (_) => {};
         this._clockSpeed = 500;
         this.reset();
     }
@@ -48,6 +49,7 @@ class BFInterpreter {
 
     nextStep() {
         this._instructionPointer++;
+        this.onInstructionPointerChange(this._instructionPointer);
         switch(this._code[this._instructionPointer]) {
             case '>':
                 this._pointerIncrement();
@@ -89,6 +91,7 @@ class BFInterpreter {
                         }
                     } while(openBrackets > 0 && this._code.length < this._instructionPointer);
                     this._instructionPointer++;
+                    this.onInstructionPointerChange(this._instructionPointer);
                 }
                 break;
             case ']':
@@ -106,6 +109,7 @@ class BFInterpreter {
                             }
                         } while(openBrackets > 0 && 0 <= this._instructionPointer);
                         this._instructionPointer--;
+                        this.onInstructionPointerChange(this._instructionPointer);
                     }
                 break;
             case undefined:
