@@ -41,7 +41,7 @@
     color: #a8a8a8;
 }
 
-#mem-table .changed {
+.changed {
     color: #009130;
     font-weight: bold;
 }

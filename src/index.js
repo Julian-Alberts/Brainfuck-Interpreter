@@ -107,9 +107,9 @@ bfInterpreter.onMemChange = (pos, value) => {
     let x = pos % 16;
     let y = ~~(pos / 16);
     if (value < 16) {
-        value = '0x0' + value.toString(16);
+        value = '0x0' + value.toString(16).toUpperCase();
     } else {
-        value = '0x' + value.toString(16);
+        value = '0x' + value.toString(16).toUpperCase();
     }
     memTable[y][x].innerText = value;
     memTable[y][x].classList.add('changed');
@@ -169,7 +169,18 @@ reset.addEventListener('click', () => {
 });
 
 bfInterpreter.onPointerChange = p => {
-    pointer.innerText = p;
+    /**
+     * @type {string}
+     */
+    p = p.toString(16).toUpperCase();
+    pointer.innerText = '0x' + (p.length === 1? '0': '') + p;
+    pointer.classList.add('changed');
+
+    clearTimeout(pointer.timeout);
+
+    pointer.timeout = setTimeout(() => {
+        pointer.classList.remove('changed');
+    }, 500);
 }
 
 clockSpeed.addEventListener('change', () => {
