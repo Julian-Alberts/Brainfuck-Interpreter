@@ -29,6 +29,26 @@ function setupTable() {
     return memTableData;
 }
 
+/**
+ * 
+ * @param {string} code 
+ */
+function parseCode(code) {
+    let parsedCode = '';
+    for (let i = 0; i < code.length; i++) {
+        if (/[.,+-<>*\[\]]/g.test(code[i])) {
+            let span = `<span>${code[i]}</span>`;
+            parsedCode += span;
+        } else if (code[i] === '\n') {
+            parsedCode += '</br>';
+        } else {
+            parsedCode += `<pre>${code[i]}</pre>`
+        }
+    }
+
+    return parsedCode;
+}
+
 class FakeConsole {
     constructor() {
         this.console = document.getElementById('console');
@@ -93,6 +113,7 @@ let memTable = setupTable();
 let bfInterpreter = new BFInterpreter();
 
 let codeInput = document.getElementById('code');
+let code = [];
 let clockSpeed = document.getElementById('clock-speed');
 
 let run = document.getElementById('run');
@@ -127,6 +148,7 @@ run.addEventListener('click', () => {
     if (!isProgrammRunning) {
         try {
             bfInterpreter.parseCode(codeInput.innerText);
+            codeInput.innerHTML = parseCode(codeInput.innerText);
             isProgrammRunning = true;
         } catch (e) {
             alert(e.message);
@@ -136,6 +158,7 @@ run.addEventListener('click', () => {
     pause.disabled = false;
     step.disabled = true;
     run.disabled = true;
+    codeInput.contentEditable = !true;
     bfInterpreter.run();
 });
 
@@ -145,12 +168,17 @@ pause.addEventListener('click', () => {
     pause.disabled = true;
     step.disabled = false;
     run.disabled = false;
+    codeInput.contentEditable = !true;
 });
 
 step.addEventListener('click', () => {
     if (!isProgrammRunning) {
         try {
             bfInterpreter.parseCode(codeInput.innerText);
+            code = parseCode(codeInput.innerText);
+            codeInput.innerHTML = parseCode(codeInput.innerText);
+            code.map(codeInput.appendChild);
+            isProgrammRunning = true;
         } catch (e) {
             alert(e.message);
         }
@@ -158,6 +186,7 @@ step.addEventListener('click', () => {
     reset.disabled = false;
     pause.disabled = true;
     isProgrammRunning = true;
+    codeInput.contentEditable = !true;
     bfInterpreter.nextStep();
 });
 
@@ -167,6 +196,7 @@ reset.addEventListener('click', () => {
     pause.disabled = true;
     step.disabled = false;
     run.disabled = false;
+    codeInput.contentEditable = !false;
     isProgrammRunning = false;
 });
 
@@ -187,6 +217,21 @@ bfInterpreter.onPointerChange = p => {
 
 bfInterpreter.onInstructionPointerChange = (p) => {
     instructionPointer.innerText = p;
+
+    document.getElementById('ip-style').innerText = 
+    `#code span:nth-of-type(${p+1}) {
+        background-color: rgba(255, 0, 0, 0.5);
+    }`;
+    /*let index = 0;
+    codeInput.innerHTML = codeInput.innerText.replace(/[.,+-<>*\[\]]/g, substr => {
+        console.log(index, p);
+        if (index === p) {
+            index++;
+            return `<span style="background-color: rgba(255,0,0,.5);">${substr}</span>`;
+        }
+        index++;
+        return substr;
+    });*/
 }
 
 clockSpeed.addEventListener('change', () => {
@@ -199,4 +244,13 @@ bfInterpreter.onStop = () => {
     pause.disabled = true;
     step.disabled = false;
     run.disabled = false;
+    codeInput.contentEditable = !false;
+}
+
+bfInterpreter.onBreakpoint = () => {
+    reset.disabled = false;
+    pause.disabled = true;
+    step.disabled = false;
+    run.disabled = false;
+    codeInput.contentEditable = false;
 }

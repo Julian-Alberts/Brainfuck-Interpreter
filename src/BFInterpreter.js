@@ -7,6 +7,7 @@ class BFInterpreter {
         this.onPointerChange = (pos) => {};
         this.onStop = () => {};
         this.onInstructionPointerChange = (_) => {};
+        this.onBreakpoint = () => {};
         this._clockSpeed = 500;
         this.reset();
     }
@@ -17,7 +18,7 @@ class BFInterpreter {
      */
     parseCode(code) {
         this.reset();
-        code = code.replace(/[^.,+-<>\[\]]/g, '');
+        code = code.replace(/[^.,+-<>*\[\]]/g, '');
         let openBrackets = 0;
         for (let i = 0; i < code.length; i++) {
             if (code[i] === '[') {
@@ -112,7 +113,15 @@ class BFInterpreter {
                         this.onInstructionPointerChange(this._instructionPointer);
                     }
                 break;
+            case '*':
+                this._instructionPointer = -1;
+                this.onInstructionPointerChange(this._instructionPointer);
+                this.pause();
+                this.onBreakpoint();
+                break;
             case undefined:
+                this._instructionPointer = -1;
+                this.onInstructionPointerChange(this._instructionPointer);
                 this.pause();
                 this.onStop();
         }
@@ -127,6 +136,7 @@ class BFInterpreter {
         }
         this._pointer = 0;
         this._instructionPointer = -1;
+        this.onInstructionPointerChange(this._instructionPointer);
         this._stdIn = '';
     }
 
