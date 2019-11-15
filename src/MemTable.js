@@ -77,6 +77,7 @@ class MemTable {
     updateMemoryPointer(pointer) {
         const x = pointer % 16;
         const y = ~~(pointer / 16);
+        
         this.styles.innerText = 
             `#mem-table th:nth-child(${x+2}), #mem-table td:nth-child(${x+2}), #mem-table tr:nth-child(${y+2}) {`+
                 'background-color: #d2ffbd;'+

@@ -101,6 +101,8 @@ reset.addEventListener('click', () => {
 });
 
 bfInterpreter.onPointerChange = p => {
+    
+    memTable.updateMemoryPointer(p);
     /**
      * @type {string}
      */
@@ -114,7 +116,6 @@ bfInterpreter.onPointerChange = p => {
         pointer.classList.remove('changed');
     }, 500);
     
-    memTable.updateMemoryPointer(p);
 }
 
 bfInterpreter.onInstructionPointerChange = (p) => {
