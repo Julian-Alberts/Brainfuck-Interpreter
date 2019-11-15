@@ -24,10 +24,6 @@
     font-family: monospace;
 }
 
-#code pre {
-    display: inline;
-}
-
 #code span {
     font-family: monospace;
 }
@@ -37,6 +33,8 @@
     padding: 5px;
     height: 50%;
     overflow: scroll;
+    word-wrap: break-word;
+    font-family: monospace;
 }
 
 #console pre {
@@ -45,6 +43,7 @@
     width: 100%;
     color: #d8d8d8;
     margin: 0;
+    white-space: pre-wrap;
 }
 
 #console:focus pre:last-child::after {
