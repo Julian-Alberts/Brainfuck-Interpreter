@@ -39,15 +39,40 @@
     overflow: scroll;
 }
 
-#console .std--in, #console .std--out {
+#console pre {
     background: transparent;
     border: none !important;
     width: 100%;
     color: #d8d8d8;
+    margin: 0;
 }
 
-#console .std--in::placeholder {
-    color: #a8a8a8;
+#console:focus pre:last-child::after {
+    content: '';
+    animation: blink 1s infinite;
+    background: white;
+    width: 2px;
+    display: inline-block;
+    height: 14px;
+}
+
+@keyframes blink {
+    from {
+        background: white;
+    }
+
+    25% {
+        background: transparent;
+    }
+
+    50% {
+        background: transparent;
+    }
+
+    75% {
+        background: white;
+    }
+
 }
 
 .changed {

@@ -18,7 +18,7 @@ function parseCode(code) {
     return parsedCode;
 }
 
-let cl = new FakeConsole();
+let cl = new FakeConsole(document.getElementById('console'));
 let memTable = new MemTable(document.getElementById('mem-table'), document.getElementById('mem-table--style'));
 let pointer = document.getElementById('pointer');
 let instructionPointer = document.getElementById('ip');
