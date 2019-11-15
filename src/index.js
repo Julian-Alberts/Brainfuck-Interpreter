@@ -19,7 +19,7 @@ function parseCode(code) {
 }
 
 let cl = new FakeConsole();
-let memTable = new MemTable(document.getElementById('mem-table'));
+let memTable = new MemTable(document.getElementById('mem-table'), document.getElementById('mem-table--style'));
 let pointer = document.getElementById('pointer');
 let instructionPointer = document.getElementById('ip');
 let bfInterpreter = new BFInterpreter();
@@ -90,13 +90,14 @@ step.addEventListener('click', () => {
 });
 
 reset.addEventListener('click', () => {
+    isProgrammRunning = false;
     bfInterpreter.reset();
+    memTable.updateMemoryPointer(0);
     reset.disabled = true;
     pause.disabled = true;
     step.disabled = false;
     run.disabled = false;
     codeInput.contentEditable = !false;
-    isProgrammRunning = false;
 });
 
 bfInterpreter.onPointerChange = p => {
@@ -112,6 +113,8 @@ bfInterpreter.onPointerChange = p => {
     pointer.timeout = setTimeout(() => {
         pointer.classList.remove('changed');
     }, 500);
+    
+    memTable.updateMemoryPointer(p);
 }
 
 bfInterpreter.onInstructionPointerChange = (p) => {
@@ -128,6 +131,7 @@ clockSpeed.addEventListener('change', () => {
 });
 
 bfInterpreter.onStop = () => {
+    memTable.updateMemoryPointer(0);
     isProgrammRunning = false;
     reset.disabled = true;
     pause.disabled = true;

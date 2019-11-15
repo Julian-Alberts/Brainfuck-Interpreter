@@ -2,21 +2,22 @@ class MemTable {
 
     /**
      * @param {HTMLDivElement} memTable 
+     * @param {HTMLStyleElement} styles
+     * @param {number} size
      */
-    constructor(memTable) {
+    constructor(memTable, styles) {
         this.memTable = memTable;
         /** @type {HTMLTableDataCellElement[][]} */
         this.memTableData = [];
         /** @type {HTMLTableHeaderCellElement[][]} */
         this.addressLabels = [[],[]];
+        this.styles = styles;
         const memTableData = this.memTableData;
-        const addressLabels = this.addressLabels;
 
         let firstRow = document.createElement('tr');
         firstRow.appendChild(document.createElement('th'));
         for(let i = 0; i < 16; i++) {
             let col = document.createElement('th');
-            addressLabels[0].push(col);
             col.textContent = '0x0' + i.toString(16).toUpperCase();
             firstRow.appendChild(col);
         }
@@ -26,7 +27,6 @@ class MemTable {
             let rowData = [];
             let row = document.createElement('tr');
             let col = document.createElement('th');
-            addressLabels[1].push(col);
             col.textContent = '0x' + i.toString(16).toUpperCase() + '0';
             row.appendChild(col);
             for(let n = 0; n < 16; n++) {
@@ -39,6 +39,7 @@ class MemTable {
             memTableData.push(rowData);
             memTable.appendChild(row);
         }
+        this.updateMemoryPointer(0);
     }
 
     /**
@@ -67,6 +68,22 @@ class MemTable {
                 memTable[y][x].classList.remove('changed');
             }, 500);
         }
+    }
+
+    /**
+     * 
+     * @param {number} pointer 
+     */
+    updateMemoryPointer(pointer) {
+        const x = pointer % 16;
+        const y = ~~(pointer / 16);
+        this.styles.innerText = 
+            `#mem-table th:nth-child(${x+2}), #mem-table td:nth-child(${x+2}), #mem-table tr:nth-child(${y+2}) {`+
+                'background-color: #d2ffbd;'+
+            '}'+
+            `#mem-table tr td:nth-child(n+${x+3}), #mem-table tr:nth-child(n+${y+3}) td {`+
+                'background-color: white;'+
+            '}';
     }
 }
 

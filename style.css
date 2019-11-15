@@ -51,12 +51,20 @@
 }
 
 .changed {
-    color: #009130;
     font-weight: bold;
+}
+
+#mem-table {
+    border-spacing: 0;
+    font-family: monospace;
 }
 
 #mem-table th {
     width: 35px;
+}
+
+#mem-table tr * {
+    padding: 2px;
 }
 
 #run::before {
