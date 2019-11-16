@@ -11,10 +11,9 @@ function parseCode(code) {
         } else if (code[i] === '\n') {
             parsedCode += '</br>';
         } else {
-            parsedCode += `<pre>${code[i]}</pre>`
+            parsedCode += code[i];
         }
     }
-
     return parsedCode;
 }
 
@@ -76,7 +75,7 @@ step.addEventListener('click', () => {
             bfInterpreter.parseCode(codeInput.innerText);
             code = parseCode(codeInput.innerText);
             codeInput.innerHTML = parseCode(codeInput.innerText);
-            code.map(codeInput.appendChild);
+            
             isProgrammRunning = true;
         } catch (e) {
             alert(e.message);
