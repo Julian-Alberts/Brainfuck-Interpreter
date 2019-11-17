@@ -80,10 +80,10 @@ class MemTable {
         
         this.styles.innerText = 
             `#mem-table th:nth-child(${x+2}), #mem-table td:nth-child(${x+2}), #mem-table tr:nth-child(${y+2}) {`+
-                'background-color: #d2ffbd;'+
+                'background-color: var(--mem-highlighting);'+
             '}'+
             `#mem-table tr td:nth-child(n+${x+3}), #mem-table tr:nth-child(n+${y+3}) td {`+
-                'background-color: white;'+
+                'background-color:  var(--panel-background);'+
             '}';
     }
 }
